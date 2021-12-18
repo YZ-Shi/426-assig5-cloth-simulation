@@ -46,11 +46,11 @@ function Constraint(p1, p2, distance) {
 }
 
 Constraint.prototype.enforce = function() {
-  // ----------- STUDENT CODE BEGIN ------------
+
   // Enforce this constraint by applying a correction to the two particles'
   // positions based on their current distance relative to their desired rest
   // distance.
-  // ----------- Our reference solution uses 10 lines of code.
+
   let corr = new THREE.Vector3();
   corr.subVectors(this.p2.position, this.p1.position);
   corr.multiplyScalar((corr.length() - this.distance) / corr.length());
@@ -124,9 +124,9 @@ function Cloth(w, h, l) {
 
   // Structural constraints
   if (SceneParams.structuralSprings) {
-    // ----------- STUDENT CODE BEGIN ------------
+
     // Add structural constraints between particles in the cloth to the list of constraints.
-    // ----------- Our reference solution uses 15 lines of code.
+
     for (let v = 0; v < h; v++) {
       for (let u = 0; u < w; u++) {
         if (u !== 0) {
@@ -141,14 +141,14 @@ function Cloth(w, h, l) {
         }
       }
     }
-    // ----------- STUDENT CODE END ------------
+
   }
 
   // Shear constraints
   if (SceneParams.shearSprings) {
-    // ----------- STUDENT CODE BEGIN ------------
+
     // Add shear constraints between particles in the cloth to the list of constraints.
-    // ----------- Our reference solution uses 21 lines of code.
+
     for (let v = 0; v < h; v++) {
       for (let u = 0; u <= w; u++) {
         if (u !== 0) {
@@ -163,14 +163,14 @@ function Cloth(w, h, l) {
         }
       }
     }
-    // ----------- STUDENT CODE END ------------
+
   }
 
   // Bending constraints
   if (SceneParams.bendingSprings) {
-    // ----------- STUDENT CODE BEGIN ------------
+
     // Add bending constraints between particles in the cloth to the list of constraints.
-    // ----------- Our reference solution uses 23 lines of code.
+
     for (let v = 0; v < h - 1; v++) {
       for (let u = 0; u < w - 1; u++) {
         constraints.push(
@@ -181,7 +181,7 @@ function Cloth(w, h, l) {
         );
       }
     }
-    // ----------- STUDENT CODE END ------------
+
   }
 
   // Store the particles and constraints lists into the cloth object
@@ -192,17 +192,17 @@ function Cloth(w, h, l) {
   // Don't double register if this handler has already been set up.
   // BUG: Remove this check - will invoke on wrong cloth obj
   if (!Cloth.eventHandlerRegistered) {
-    // ----------- STUDENT CODE BEGIN ------------
+
     // Add a listener for key press events.
     // The listener should invoke `cloth.handleImpactEvents`, which you
     // will complete elsewhere in this file.
     //
     // The `onMouseMove`, `onWindowResize`, and `Renderer.init` functions
     // in `render.js` may serve as a useful guide.
-    // ----------- Our reference solution uses 1 lines of code.
+
     window.addEventListener("keydown", handleImpactEvents, false);
     window.addEventListener("click", handleClickEvents, false);
-    // ----------- STUDENT CODE END ------------
+ 
     Cloth.eventHandlerRegistered = true;
   }
 }
@@ -259,7 +259,7 @@ function handleImpactEvents(event) {
   // It looks especially cool if you start turning off spring constraints.
   const scale = 30; // the magnitude of the offset produced by this impact.
 
-  // ----------- STUDENT CODE BEGIN ------------
+
   // (1) Check which key was pressed. If it isn't the triggering key, do nothing.
   // (2) Shoot a ray into the scene to determine what point is being looked at.
   //     (You may find the `cloth.getLookedAtParticle()` function useful).
@@ -270,7 +270,7 @@ function handleImpactEvents(event) {
   // Uncomment this line to inspect the fields of event in more detail:
   // debugger;
 
-  // ----------- Our reference solution uses 8 lines of code.
+
   // Check which key is pressed
   let direction;
   if (event.key === "Enter") {
@@ -288,13 +288,13 @@ function handleImpactEvents(event) {
   // calculate offset and update particle position
   let offset = direction.multiplyScalar(scale);
   particle.position.add(offset);
-  // ----------- STUDENT CODE END ------------
+
 }
 
 function handleClickEvents(event) {
   const scale = 30; // the magnitude of the offset produced by this impact.
 
-  // ----------- STUDENT CODE BEGIN ------------
+
   let particle = cloth.getLookedAtParticle();
   if (particle === null) return;
   for (let i = 0; i < cloth.particles.length; i++) {
@@ -303,7 +303,6 @@ function handleClickEvents(event) {
     cloth.particles[i].position.add(offset);
   }
 
-  // ----------- STUDENT CODE END ------------
 }
 
 // ***************************************************************
@@ -314,14 +313,14 @@ function handleClickEvents(event) {
 Cloth.prototype.applyGravity = function() {
   let particles = this.particles;
   const GRAVITY = SceneParams.GRAVITY;
-  // ----------- STUDENT CODE BEGIN ------------
+
   // For each particle in the cloth, apply force due to gravity.
-  // ----------- Our reference solution uses 4 lines of code.
+
   let accel = new THREE.Vector3(0, -GRAVITY, 0);
   for (let i = 0; i < particles.length; i++) {
     particles[i].addForce(accel.clone().multiplyScalar(particles[i].mass));
   }
-  // ----------- STUDENT CODE END ------------
+
 };
 
 // Oscllate one edge of the cloth up and down with the specified
@@ -360,7 +359,7 @@ Cloth.prototype.applyWave = function(amplitude, frequency) {
 //        intentionally left for you to decide upon.
 Cloth.prototype.applyWind = function(windStrength) {
   let particles = this.particles;
-  // ----------- STUDENT CODE BEGIN ------------
+
   // Here are some dummy values for a relatively boring wind.
   //
   // Try making it more interesting by making the strength and direction
@@ -371,8 +370,7 @@ Cloth.prototype.applyWind = function(windStrength) {
   // One suggestion is to use sinusoidal functions. Play around with the
   // constant factors to find an appealing result!
   let windForce = new THREE.Vector3(1, 1, 1).normalize().multiplyScalar(windStrength);
-  // ----------- Our reference solution uses 6 lines of code.
-  // ----------- STUDENT CODE END ------------
+
 
   // Apply the wind force to the cloth particles
   let faces = Scene.cloth.geometry.faces;
@@ -408,8 +406,7 @@ Cloth.prototype.applyRain = function(strength, rate) {
   //    (i)    Compute a random impact location
   //    (ii)   Add an impulse to that raindrop's position
   //    (iii)  Add a weakened impulse to nearby raindrops
-  // ----------- STUDENT CODE BEGIN ------------
-  // ----------- Our reference solution uses 21 lines of code.
+
   let impulse = new THREE.Vector3(0,  -1,  0);
   impulse.multiplyScalar(strength);
   for (let i = 0; i < rate; i++) {
@@ -430,7 +427,7 @@ Cloth.prototype.applyRain = function(strength, rate) {
       particles[index + 1].position.add(impulse.clone().divideScalar(3));
     }
   }
-  // ----------- STUDENT CODE END ------------
+
 }
 
 
@@ -446,9 +443,7 @@ Cloth.prototype.applyRain = function(strength, rate) {
 Cloth.prototype.applyCustom = function(strength, rate) {
   let particles = this.particles;
 
-  // ----------- STUDENT CODE BEGIN ------------
-  // ----------- Our reference solution uses 36 lines of code.
-  // ----------- STUDENT CODE END ------------
+
 }
 
 // Wrapper function that calls each of the other force-related
@@ -474,14 +469,14 @@ Cloth.prototype.applyForces = function() {
 
 Cloth.prototype.update = function(deltaT) {
   let particles = this.particles;
-  // ----------- STUDENT CODE BEGIN ------------
+
   // For each particle in the cloth, have it update its position
   // by calling its integrate function.
-  // ----------- Our reference solution uses 3 lines of code.
+
   for (let i = 0; i < particles.length; i++) {
     particles[i].integrate(deltaT);
   }
-  // ----------- STUDENT CODE END ------------
+
 };
 
 // ***************************************************************
@@ -494,29 +489,29 @@ Cloth.prototype.handleCollisions = function() {
   let floor  = Scene.ground;
   let sphere = Scene.sphere;
   let box    = Scene.box;
-  // ----------- STUDENT CODE BEGIN ------------
+
   // For each particle in the cloth, call the appropriate function(s)
   // for handling collisions with various objects.
   //
   // Edit this function as you implement additional collision-detection functions.
-  // ----------- Our reference solution uses 5 lines of code.
+
   for (let i = 0; i < particles.length; i++) {
     particles[i].handleFloorCollision(floor);
     particles[i].handleSphereCollision(sphere);
     particles[i].handleBoxCollision(box);
   }
-  // ----------- STUDENT CODE END ------------
+
 };
 
 Cloth.prototype.enforceConstraints = function() {
   let constraints = this.constraints;
-  // ----------- STUDENT CODE BEGIN ------------
+
   // Enforce all constraints in the cloth.
-  // ----------- Our reference solution uses 3 lines of code.
+
   for (let i = 0; i < constraints.length; i++) {
     constraints[i].enforce();
   }
-  // ----------- STUDENT CODE END ------------
+
 };
 
 
@@ -572,7 +567,5 @@ Cloth.prototype.handleSelfIntersections = function() {
 
   let particles = this.particles;
 
-  // ----------- STUDENT CODE BEGIN ------------
-  // ----------- Our reference solution uses 20 lines of code.
-  // ----------- STUDENT CODE END ------------
+
 };
