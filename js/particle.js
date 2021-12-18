@@ -30,10 +30,9 @@ Particle.prototype.lock = function() {
 // Params:
 // * force: THREE.Vector3 - the force to add
 Particle.prototype.addForce = function(force) {
-  // ----------- STUDENT CODE BEGIN ------------
-  // ----------- Our reference solution uses 1 lines of code.
+
   this.netForce.add(force);
-  // ----------- STUDENT CODE END ------------
+
 };
 
 // Perform Verlet integration on this particle with the provided
@@ -43,13 +42,13 @@ Particle.prototype.addForce = function(force) {
 Particle.prototype.integrate = function(deltaT) {
   const DAMPING = SceneParams.DAMPING;
 
-  // ----------- STUDENT CODE BEGIN ------------
+
   // You need to:
   // (1) Save the old (i.e. current) position into this.previous.
   // (2) Compute the new position of this particle using Verlet integration,
   //     and store it into this.position.
   // (3) Reset the net force acting on the particle (i.e. make it (0, 0, 0) again).
-  // ----------- Our reference solution uses 13 lines of code.
+
   //this.previous = this.position.clone();
   let newPos = new THREE.Vector3();
   newPos.add(this.position);
@@ -59,7 +58,7 @@ Particle.prototype.integrate = function(deltaT) {
   this.previous = this.position;
   this.position = newPos;
   this.netForce = new THREE.Vector3();
-  // ----------- STUDENT CODE END ------------
+
 };
 
 // Handle collisions between this Particle and the provided floor.
@@ -74,12 +73,12 @@ Particle.prototype.handleFloorCollision = function(floor) {
   let floorMesh = floor.mesh;
   let floorPosition = floorMesh.position;
   const EPS = 3;
-  // ----------- STUDENT CODE BEGIN ------------
+
   // Handle collision of this particle with the floor.
-  // ----------- Our reference solution uses 4 lines of code.
+
   if (this.position.y <= floorPosition.y + EPS)
   this.position.setY(floorPosition.y + EPS);
-  // ----------- STUDENT CODE END ------------
+
 };
 
 // Handle collisions between this Particle and the provided sphere.
@@ -99,12 +98,12 @@ Particle.prototype.handleSphereCollision = function(sphere) {
     let spherePosition = sphere.position.clone();
     let prevSpherePosition = sphere.prevPosition.clone();
     let EPS = 5; // empirically determined
-    // ----------- STUDENT CODE BEGIN ------------
+
     // Handle collision of this particle with the sphere.
     // As with the floor, use EPS to prevent clipping.
     let posFriction = new THREE.Vector3();
     let posNoFriction = new THREE.Vector3();
-    // ----------- Our reference solution uses 28 lines of code.
+
     let distVec = this.position.clone().sub(spherePosition);
     let dist = distVec.length();
     if (dist - sphere.radius > EPS) return;
@@ -121,7 +120,7 @@ Particle.prototype.handleSphereCollision = function(sphere) {
       newPos = posNoFriction;
     }
     this.position = newPos;
-    // ----------- STUDENT CODE END ------------
+
   }
 };
 
@@ -139,12 +138,12 @@ Particle.prototype.handleBoxCollision = function(box) {
     const friction = SceneParams.friction;
     let boundingBox = box.boundingBox.clone();
     const EPS = 10; // empirically determined
-    // ----------- STUDENT CODE BEGIN ------------
+
     // Handle collision of this particle with the axis-aligned box.
     // As before, use EPS to prevent clipping
     let posFriction = new THREE.Vector3();
     let posNoFriction = new THREE.Vector3();
-    // ----------- Our reference solution uses 66 lines of code.
+
     // do nothing if outside of box
     boundingBox.expandByScalar(EPS);
     if (!boundingBox.containsPoint(this.position)) return;
@@ -191,7 +190,7 @@ Particle.prototype.handleBoxCollision = function(box) {
       newPos = posNoFriction;
     }
     this.position = newPos;
-    // ----------- STUDENT CODE END ------------
+
   }
 };
 
